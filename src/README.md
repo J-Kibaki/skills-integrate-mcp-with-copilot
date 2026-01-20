@@ -1,6 +1,6 @@
 # Mergington High School Activities API
 
-A super simple FastAPI application that allows students to view and sign up for extracurricular activities.
+A FastAPI application that allows students to view and sign up for extracurricular activities. Data now persists to a SQLite database so sign-ups survive server restarts.
 
 ## Features
 
@@ -12,13 +12,14 @@ A super simple FastAPI application that allows students to view and sign up for 
 1. Install the dependencies:
 
    ```
-   pip install fastapi uvicorn
+   pip install -r requirements.txt
    ```
 
-2. Run the application:
+2. Run the application from the `src` directory:
 
    ```
-   python app.py
+   cd src
+   uvicorn app:app --reload
    ```
 
 3. Open your browser and go to:
@@ -31,6 +32,7 @@ A super simple FastAPI application that allows students to view and sign up for 
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
 | GET    | `/activities`                                                     | Get all activities with their details and current participant count |
 | POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| DELETE | `/activities/{activity_name}/unregister?email=student@mergington.edu` | Unregister from an activity |
 
 ## Data Model
 
@@ -47,4 +49,8 @@ The application uses a simple data model with meaningful identifiers:
    - Name
    - Grade level
 
-All data is stored in memory, which means data will be reset when the server restarts.
+## Persistence
+
+- Data is stored in a SQLite database at `src/data/app.db` using SQLModel/SQLAlchemy.
+- On first run, the database is seeded with example activities and participants. Subsequent runs keep prior sign-ups.
+- To reset the data, stop the app and delete `src/data/app.db`; it will be recreated and reseeded on next start.
